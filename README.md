@@ -21,6 +21,11 @@ A collection of agent skills for indie builders.
   npx skills@latest add donleqt/skills/idea-validation
   ```
 
+- **building-in-public** - Creates authentic build-in-public posts and threads from commits, file changes, and daily progress.
+  ```bash
+  npx skills@latest add donleqt/skills/building-in-public
+  ```
+
 ## About
 
 Personal skill directory by `donleqt`.
