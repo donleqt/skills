@@ -9,6 +9,13 @@ A collection of agent skills for indie builders.
   npx skills@latest add donleqt/skills/indie-app-naming
   ```
 
+## Marketing & Growth
+
+- **indie-marketing** - Practical, low-budget marketing playbooks with copy-paste-ready launch and growth materials.
+  ```bash
+  npx skills@latest add donleqt/skills/indie-marketing
+  ```
+
 ## About
 
 Personal skill directory by `donleqt`.
