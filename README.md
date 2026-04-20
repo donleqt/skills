@@ -16,6 +16,11 @@ A collection of agent skills for indie builders.
   npx skills@latest add donleqt/skills/indie-marketing
   ```
 
+- **idea-validation** - Fast, data-backed go/no-go validation with timelines, predictions, and clear recommendations.
+  ```bash
+  npx skills@latest add donleqt/skills/idea-validation
+  ```
+
 ## About
 
 Personal skill directory by `donleqt`.
