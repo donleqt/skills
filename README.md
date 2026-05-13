@@ -28,12 +28,7 @@ A collection of agent skills for indie builders.
 
 ## Code & Planning
 
-- **simplify** - Ruthlessly simplifies code, plans, and designs while preserving correctness and maintainability.
-  ```bash
-  npx skills@latest add donleqt/skills/simplify
-  ```
-
-- **kiss** - KISS / `/kiss`: same simplify mindset—least code and concepts, same or better behavior.
+- **kiss** (`/kiss`) - Ruthlessly simplifies code, plans, and designs while keeping the same (or better) functionality; least code and moving parts without sacrificing correctness or maintainability.
   ```bash
   npx skills@latest add donleqt/skills/kiss
   ```
