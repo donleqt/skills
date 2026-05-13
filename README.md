@@ -26,6 +26,18 @@ A collection of agent skills for indie builders.
   npx skills@latest add donleqt/skills/building-in-public
   ```
 
+## Code & Planning
+
+- **simplify** - Ruthlessly simplifies code, plans, and designs while preserving correctness and maintainability.
+  ```bash
+  npx skills@latest add donleqt/skills/simplify
+  ```
+
+- **kiss** - KISS / `/kiss`: same simplify mindset—least code and concepts, same or better behavior.
+  ```bash
+  npx skills@latest add donleqt/skills/kiss
+  ```
+
 ## About
 
 Personal skill directory by `donleqt`.
