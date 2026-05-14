@@ -2,92 +2,45 @@
 name: indie-app-naming
 description: |
   Best practices for choosing a strong, memorable, and available name for an indie app or game.
-  Use this skill whenever the user asks for app name ideas, naming advice, branding tips for solo/small-team apps, domain checks, or how to evaluate potential names.
+  Use whenever the user asks for app name ideas, naming advice, branding for solo/small teams, domain checks, or how to evaluate names.
   Triggers: "name my app", "app name ideas", "best name for", "naming my indie app", "check domain", "name brainstorming".
 ---
 
-# Indie App Naming Skill
+# Indie App Naming
 
-## When to Use This Skill
-- User wants name suggestions for a new indie app, game, or tool.
-- User needs help evaluating or improving an existing name idea.
-- User asks about domain availability, app store name conflicts, or branding best practices for solo/small-team developers.
-- User wants a structured process to avoid common naming pitfalls.
+**When to use**: naming a new app/game/tool, evaluating a name, domains, store conflicts, or solo/small-team branding.
 
-## Core Principles for Great Indie App Names
-- **Short & memorable** - 2-4 syllables, ideally < 12-15 characters.
-- **Easy to spell and pronounce** - No clever misspellings, numbers, or hyphens that confuse people.
-- **Unique yet brandable** - Stands out while being easy to say and remember.
-- **Positive vibe** - Avoid negative or awkward meanings in English or other major languages.
-- **ASO-friendly** - Consider adding a descriptive subtitle on app stores (e.g., "Flow: Focus Timer").
-- Two main strategies:
-  - **Descriptive** - Helps early discoverability (e.g., "HabitFlow - Daily Tracker").
-  - **Abstract/Brandable** - More scalable and memorable long-term (e.g., "Calm", "Notion", "Spark").
+## Principles
 
-## Step-by-Step Naming Process
-1. **Define the core**
-   Write a one-sentence description of what the app does and who it's for. Extract 8-12 keywords (function, benefit, emotion, audience).
+- Short, memorable, easy to spell and say (avoid cute misspellings, numbers, confusing hyphens).
+- Positive in English and major markets; check awkward translations.
+- **Descriptive** helps early discovery; **abstract** scales as a brand. Mix both in brainstorming.
+- ASO: pair a brand name with a clear store subtitle (e.g. "Flow: Focus Timer").
 
-2. **Brainstorm**
-   - Combine words or create portmanteaus.
-   - Use evocative or action words.
-   - Generate 30-50 raw ideas (mix descriptive + abstract).
+## Process
 
-3. **Shortlist**
-   Remove anything too long, hard to spell, or too similar to existing big apps.
+1. **Core** — One sentence: what it does and for whom. Pull 8–12 keywords (function, benefit, emotion, audience).
+2. **Brainstorm** — Portmanteaus, combos, evocative verbs; 30–50 ideas across descriptive + abstract.
+3. **Shortlist** — Drop long, hard-to-spell, or near-big-brand names.
+4. **Test** — Say aloud; ask "what does this sound like?"; watch for unintended meanings.
 
-4. **Evaluate & Test**
-   - Say it out loud.
-   - Ask others: "What does this sound like it does?"
-   - Check for unintended meanings.
+## Before you commit (check early)
 
-## Availability & Legal Checks (Critical for Indies)
-Perform these checks **before** falling in love with a name:
+Stores (Apple + Google), **`.com`** then `.io` / `.app` / `.dev` / `.co`, major socials (X, IG, TikTok, GitHub, YouTube), quick trademark skim (USPTO, EUIPO, or local), developer/studio display name.
 
-- **App Stores** - Search Apple App Store + Google Play for exact/similar names.
-- **Domain names** - Prioritize `.com`, then `.io`, `.app`, `.co`, etc.
-- **Social handles** - Check consistency on X/Twitter, Instagram, TikTok, GitHub, YouTube.
-- **Trademark** - Quick search on USPTO (US), EUIPO, or your local office. Avoid obvious conflicts with big brands.
-- **Developer name** - Decide on personal name vs. studio name.
+**Domains**: bulk tools (e.g. Namechk, InstantDomainSearch, registrar search). Per candidate: exact `.com` first; if taken, alternates; avoid parked/squatted junk pricing; WHOIS if needed. Batch 5–10 variants. Reserve store listing + domain/socials once you have a shortlist winner.
 
-### Domain Availability Check Process
-1. Use bulk checkers for speed:
-   - Namechk.com (checks domains + socials)
-   - InstantDomainSearch.com (real-time as you type)
-   - Namecheap, Porkbun, Cloudflare Registrar, or GoDaddy search tools
+## Pitfalls
 
-2. For each promising name:
-   - Check exact `.com` first.
-   - If taken, try `.io`, `.app`, `.dev`, `.co`.
-   - Verify the domain isn't parked/squatted with high renewal price.
-   - Use WHOIS lookup (lookup.icann.org or terminal `whois`) for ownership details if needed.
+Clever misspellings; leading "My"/"The"; ignoring cultural meaning; clone of a known brand; falling in love before availability checks.
 
-3. Bulk tip: Prepare a list of 5-10 name variations and check them together.
+## When suggesting names
 
-**Pro tip**: Reserve the name early in the app stores (even with a placeholder) and register the domain/socials as soon as you shortlist a winner.
+- 8–12 ideas grouped by style (descriptive / abstract / playful).
+- For top picks: why it works, domain/social notes, subtitle idea.
+- Tell the user to run their own full legal/availability checks; offer refinement from genre, audience, keywords.
 
-## Common Pitfalls to Avoid
-- Overly clever misspellings (hurts search and word-of-mouth).
-- Starting with "My", "The", or generic prefixes.
-- Ignoring cultural meanings.
-- Choosing a name that conflicts with existing popular apps or brands.
-- Delaying availability checks until after emotional attachment.
-
-## Output Guidelines When Suggesting Names
-- Provide 8-12 name ideas grouped by style (descriptive, abstract, playful, etc.).
-- For each strong candidate, note:
-  - Why it works.
-  - Potential domain/social availability notes.
-  - App store subtitle suggestion.
-- Always remind the user to run full availability checks themselves.
-- Offer to refine based on the app's specific genre, target audience, or keywords.
-
-## Examples of Successful Indie/App Names
-- Descriptive + vibe: Focus@Will, Habitica, Duolingo
-- Abstract: Calm, Notion, Figma, Linear, Arc
-- Playful: Headspace, Forest (focus app), Streaks
-
-Apply this process consistently for every naming request. Prioritize names that feel right to the user while being practical for marketing and discoverability.
+**Examples** — Descriptive+vibe: Habitica, Duolingo. Abstract: Calm, Notion, Figma, Linear. Playful: Headspace, Forest, Streaks.
 
 ---
-**License**: This skill is free to use and adapt for personal or open-source projects.
+**License**: Free to use and adapt for personal or open-source projects.
