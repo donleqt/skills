@@ -33,6 +33,11 @@ A collection of agent skills for indie builders.
   npx skills@latest add donleqt/skills/kiss
   ```
 
+- **tests-add-minimum** (`/test`) - Adds a small, fast test suite focused on critical paths and pure domain logic—not line coverage or exhaustive e2e.
+  ```bash
+  npx skills@latest add donleqt/skills/tests-add-minimum
+  ```
+
 ## About
 
 Personal skill directory by `donleqt`.
