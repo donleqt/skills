@@ -38,6 +38,13 @@ A collection of agent skills for indie builders.
   npx skills@latest add donleqt/skills/tests-add-minimum
   ```
 
+## UI & Design
+
+- **visual-hierarchy** (`/visual-hierarchy`) - Makes primary info clear and prominent, secondary info quieter—using tokens and typography, not layout rewrites.
+  ```bash
+  npx skills@latest add donleqt/skills/visual-hierarchy
+  ```
+
 ## About
 
 Personal skill directory by `donleqt`.
