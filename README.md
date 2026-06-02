@@ -38,6 +38,11 @@ A collection of agent skills for indie builders.
   npx skills@latest add donleqt/skills/tests-add-minimum
   ```
 
+- **minimal-effective-implementation** - Audits branch or local changes to remove unnecessary code and keep the diff minimal and effective before commit or PR.
+  ```bash
+  npx skills@latest add donleqt/skills/minimal-effective-implementation
+  ```
+
 ## UI & Design
 
 - **visual-hierarchy** (`/visual-hierarchy`) - Makes primary info clear and prominent, secondary info quieter—using tokens and typography, not layout rewrites.
