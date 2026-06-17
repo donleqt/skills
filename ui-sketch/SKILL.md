@@ -14,10 +14,9 @@ When this skill is activated:
 5. Read `references/validate-mock.md`
 6. Copy `templates/base-shell.html` or the closest matching template from `templates/`
 7. Generate a responsive HTML mockup using project or default spacing tokens only
-8. Run the visual QA checklist in `references/validate-mock.md`
-9. Open the HTML in a browser at 375px, 768px, and 1280px; fix all failures
-10. Do NOT implement production code
-11. Return only the requested mock output format
+8. Run the visual QA checklist and responsive self-review in `references/validate-mock.md`
+9. Do NOT implement production code
+10. Return only the requested mock output format
 
 ## Resources
 

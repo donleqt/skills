@@ -13,8 +13,7 @@ Process:
 7. Include empty state
 8. Include loading state
 9. Include primary CTA
-10. Run visual QA per `references/validate-mock.md`
-11. Open in browser at 375px, 768px, 1280px; fix failures before returning
+10. Self-review responsive layout at mobile, tablet, and desktop per `references/validate-mock.md`
 
 Output:
 
@@ -32,7 +31,7 @@ Rules:
 - Placeholder data allowed
 - Static interactions allowed
 - Spacing must use tokens from `.ui-skill/tokens.json` or `references/default-tokens.json`
-- `notes` must include `Visual QA: passed at 375px, 768px, 1280px` when browser verification succeeded
+- `notes` must include `Self-review: passed mobile, tablet, desktop responsive checks` when validation succeeded
 
 Forbidden:
 

@@ -2,18 +2,30 @@
 
 Never return a mock until every check below passes. Fix failures in the HTML, then re-check.
 
-## Browser verification (required)
+## Self-review (required)
 
-1. Save the mock to a temporary `.html` file.
-2. Open it in a browser (`file://` or local static server).
-3. Snapshot or inspect at three widths:
-   - **Mobile:** 375px
-   - **Tablet:** 768px
-   - **Desktop:** 1280px
-4. Fix any layout, spacing, or overflow issues found.
-5. Re-open and re-check until all checks pass.
+Before returning, mentally walk through the HTML at three viewport widths. Trace the DOM top to bottom and ask what each breakpoint would render.
 
-Use `fast-browser-mcp` when available. If browser tools are unavailable, manually trace the DOM and spacing classes section by section at each breakpoint.
+**Mobile (375px)**
+
+- Is the layout single-column with stacked sections?
+- Would any `grid-cols-*`, `flex-row`, or fixed widths cause horizontal scroll?
+- Are inputs and buttons full-width where needed?
+- Is the primary CTA visible without excessive scrolling?
+
+**Tablet (768px)**
+
+- Do grids step up correctly (`md:grid-cols-2`, etc.)?
+- Would side-by-side header actions still fit without crowding?
+- Is text still readable — nothing squished into narrow columns?
+
+**Desktop (1280px+)**
+
+- Does multi-column layout use `max-w-7xl` instead of stretching edge-to-edge?
+- Are stat cards, lists, and panels evenly spaced with token `gap-6`?
+- Is there still clear section rhythm (`space-y-6`)?
+
+Fix anything that would fail at any width, then re-review until all checks pass.
 
 ## Visual QA checklist
 
@@ -36,7 +48,7 @@ Mark each item pass/fail. All must pass.
 |-------|---------------|
 | Hierarchy | One clear `h1`; subsections use `h2`/`h3` in order |
 | Readability | Body text ≥ 14px equivalent; sufficient line-height |
-| No overflow | No clipped, overlapping, or truncated text |
+| No overflow | No clipped, overlapping, or truncated text (`truncate` only where intentional) |
 | Placeholder length | Sample text is realistic length (not one-word labels everywhere) |
 
 ### Components
@@ -57,6 +69,7 @@ Mark each item pass/fail. All must pass.
 | Tablet (768px) | Grid adapts (e.g. 2 columns); nothing squished |
 | Desktop (1280px+) | Multi-column layout uses space; not stretched edge-to-edge |
 | Navigation | Discoverable on all breakpoints (hamburger or visible nav) |
+| Breakpoint prefixes | `sm:`, `md:`, `lg:` used consistently — mobile-first, not desktop-first |
 
 ### HTML quality
 
@@ -80,7 +93,7 @@ When issues are found, fix in this order:
 ## Forbidden shortcuts
 
 - Do not "fix" spacing by adding one-off margin classes outside the token scale.
-- Do not skip browser verification because the HTML "looks fine" in source.
+- Do not skip self-review because the HTML "looks fine" at a glance.
 - Do not return a mock with known horizontal scroll or edge-to-edge content.
 
 ## Output notes
@@ -88,7 +101,5 @@ When issues are found, fix in this order:
 When returning the mock JSON, include in `notes` any assumptions made and confirm:
 
 ```
-Visual QA: passed at 375px, 768px, 1280px
+Self-review: passed mobile, tablet, desktop responsive checks
 ```
-
-If a check could not be verified (e.g. no browser available), state that explicitly and list what was checked manually.
