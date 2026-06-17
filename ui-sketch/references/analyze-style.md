@@ -37,4 +37,6 @@ Generate:
 ├── patterns.md
 └── examples/
 
-Future sketches should reuse discovered patterns.
+If no project styles exist yet, seed `tokens.json` from `references/default-tokens.json`.
+
+Future sketches should reuse discovered patterns. Never invent spacing outside the token scale.
