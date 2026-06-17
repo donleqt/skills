@@ -50,6 +50,11 @@ A collection of agent skills for indie builders.
   npx skills@latest add donleqt/skills/visual-hierarchy
   ```
 
+- **ui-sketch** - Generate responsive UI mockups before implementation. Analyzes project styles, builds reusable UI knowledge, and produces self-contained HTML previews for UX validation.
+  ```bash
+  npx skills@latest add donleqt/skills/ui-sketch
+  ```
+
 ## About
 
 Personal skill directory by `donleqt`.
