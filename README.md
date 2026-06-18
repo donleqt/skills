@@ -45,6 +45,11 @@ A collection of agent skills for indie builders.
 
 ## UI & Design
 
+- **ui-wireframe** (`/ui-wireframe`) - Create low-fidelity ASCII wireframes to validate information architecture, layout, navigation, workflows, and responsive behavior before visual design or implementation.
+  ```bash
+  npx skills@latest add donleqt/skills/ui-wireframe
+  ```
+
 - **visual-hierarchy** (`/visual-hierarchy`) - Makes primary info clear and prominent, secondary info quieter—using tokens and typography, not layout rewrites.
   ```bash
   npx skills@latest add donleqt/skills/visual-hierarchy
