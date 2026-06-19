@@ -1,10 +1,6 @@
 ---
 name: visual-hierarchy
-description: >-
-  Improve visual hierarchy in screens and components — primary info clear and
-  prominent, secondary info quieter. Use when the user asks to fix hierarchy,
-  reduce visual noise, emphasize primary content, de-emphasize secondary UI,
-  or invokes /visual-hierarchy.
+description: Improve visual hierarchy so primary content is prominent and secondary UI is quieter. Use when fixing hierarchy, visual noise, or invoking /visual-hierarchy.
 disable-model-invocation: true
 ---
 

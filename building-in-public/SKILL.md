@@ -1,13 +1,13 @@
 ---
 name: building-in-public
-description: |
-  Build honest, engaging Build in Public posts from git commits, diffs, or a short “what I shipped” summary—standalone, thread, or micro. Value-first tone; emojis and metrics only when real; clear CTA.
-  Triggers: "build in public post", "daily bip post", "generate bip from git", "twitter thread from commits", "share today's progress", "build in public update".
+description: Draft honest build-in-public posts from git history or a short progress summary. Use for daily updates, threads, or sharing what shipped.
 ---
 
 # Building in Public
 
 **When:** Progress post from recent work; pair with `indie-marketing` if they want distribution help.
+
+**Triggers:** build in public post, daily bip post, generate bip from git, twitter thread from commits, share today's progress, build in public update.
 
 **Inputs:** `git log`, `git diff --name-only`, and user context (app name, feature, blockers). No git? Ask for commits or a one-paragraph summary of today.
 

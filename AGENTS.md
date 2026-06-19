@@ -14,6 +14,8 @@ Each skill is stored as a top-level folder containing a `SKILL.md` file.
 | Inspect recent commits | `git log --oneline -n 10` |
 | Add a new skill folder | `mkdir -p <skill-slug>` |
 | Link skills for agents | `./scripts/link-agents-skills.sh` |
+| Validate skill descriptions | `./scripts/check-skill-descriptions.sh` |
+| Run description checker tests | `./scripts/tests/check-skill-descriptions.test.sh` |
 
 ## Project layout
 
@@ -21,6 +23,8 @@ Each skill is stored as a top-level folder containing a `SKILL.md` file.
 - `<skill-slug>/SKILL.md` - One top-level folder per skill (for example: `indie-marketing/SKILL.md`).
 - `.agents/skills/<skill-slug>` - Symlink to `../../<skill-slug>` so agents discover skills in-repo.
 - `scripts/link-agents-skills.sh` - Creates or refreshes all `.agents/skills/` symlinks.
+- `scripts/check-skill-descriptions.sh` - Validates `description` frontmatter (single YAML line, 120–200 chars, ends with `.`).
+- `scripts/tests/check-skill-descriptions.test.sh` - Regression tests for the description checker (pass/fail fixtures).
 - `LICENSE` - Repository license.
 
 ## Conventions
@@ -28,6 +32,9 @@ Each skill is stored as a top-level folder containing a `SKILL.md` file.
 - Keep exactly one skill per top-level folder.
 - Use kebab-case for skill folder names (for example: `idea-validation`).
 - Every skill must include YAML frontmatter with at least `name` and `description`.
+- `description` must be a single YAML line (120–200 chars, ending with `.`): what the skill does + when to use it.
+- Do not put trigger lists, output formats, or behavioral rules in `description`; put those in the skill body.
+- Prefer `description: ...` over multi-line `|` or folded `>-` blocks.
 - Preserve user-provided skill content as much as possible; only normalize formatting when needed.
 - When adding a new public skill, always update `README.md` with an install command.
 - After adding a skill folder, run `./scripts/link-agents-skills.sh` (or rely on CI) so `.agents/skills/` stays in sync.

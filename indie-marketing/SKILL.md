@@ -1,14 +1,13 @@
 ---
 name: indie-marketing
-description: |
-  Low-budget indie growth: positioning, 2–3 channels, ~30-day plan, copy-paste X and landing copy.
-  Always end by telling the user to save to docs/*.md or a GitHub issue.
-  Triggers: "market my app", "growth plan", "get users", "marketing strategy", "how to promote", "build in public", "X strategy", "launch marketing".
+description: Low-budget indie growth plan with positioning, channels, and paste-ready copy. Use when the user asks for marketing, launch, or user acquisition help.
 ---
 
 # Indie Marketing
 
 **When:** Launch or growth help for an indie app, tool, micro-SaaS, or game—especially when the user wants **paste-ready copy**.
+
+**Triggers:** market my app, growth plan, get users, marketing strategy, how to promote, build in public, X strategy, launch marketing.
 
 **Mindset:** Distribution beats features; give value before asks; **2–3 channels max**; consistency beats volume; build in public and communities are high leverage.
 

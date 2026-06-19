@@ -1,10 +1,6 @@
 ---
 name: tests-add-minimum
-description: >-
-  Writes tests with a "main things work" philosophy — protect critical paths and
-  pure domain logic, not line coverage. Uses layered testing (pure logic first,
-  cheap integration second, heavy e2e optional). Use when the user asks for tests,
-  a test plan, test strategy, /test, or "add tests without chasing coverage."
+description: Add a small, fast test suite focused on critical paths and pure logic, not coverage. Use when the user asks for tests, a test plan, or /test.
 disable-model-invocation: true
 ---
 

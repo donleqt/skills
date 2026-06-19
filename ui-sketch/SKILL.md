@@ -1,6 +1,6 @@
 ---
 name: ui-sketch
-description: Generate responsive UI mockups before implementation. Use when users request new screens, dashboards, workflows, forms, redesigns, settings pages, navigation changes, or when UI requirements are ambiguous. Analyze existing project styles, build reusable UI knowledge, and produce self-contained HTML previews for UX validation before writing production code.
+description: Generate responsive HTML UI mockups before implementation. Use when designing new screens, workflows, forms, or when UI requirements are ambiguous.
 ---
 
 # UI Sketch

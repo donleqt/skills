@@ -1,16 +1,13 @@
 ---
 name: idea-validation
-description: |
-  Data-backed go/no-go for indie apps and micro-SaaS (2025–2026 benchmarks).
-  Outputs a fixed report shape: 7–14 day validation plan, time-to-first-revenue bands,
-  MRR/user ranges, and DO IT / DON'T DO IT / PROCEED WITH CAUTION.
-  Triggers: validate my idea, is this worth building, should I build this, time to first revenue,
-  will this make money, idea assessment.
+description: Data-backed go/no-go for indie apps and micro-SaaS. Use when validating an idea, estimating time-to-revenue, or asking if something is worth building.
 ---
 
 # Idea validation
 
 **When:** User wants an honest decision before building (app, tool, micro-SaaS, AI wrapper, game).
+
+**Triggers:** validate my idea, is this worth building, should I build this, time to first revenue, will this make money, idea assessment.
 
 **Benchmarks (use in reasoning, don’t lecture):**
 - ~45–54% of indie SaaS never earns; median MRR is tiny (~$25–$100); top ~30% take most revenue.

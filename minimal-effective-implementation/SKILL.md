@@ -1,10 +1,6 @@
 ---
 name: minimal-effective-implementation
-description: >-
-  Audits local or branch changes to remove code that is not required for the
-  task, keeping the diff minimal and effective without extra mess. Use when the
-  user asks to scan changes for unnecessary code, trim bloat, simplify before
-  commit or PR, or says they want minimal and effective implementation.
+description: Audit local or branch changes to remove unnecessary code and keep the diff minimal. Use before commit or PR when trimming bloat or simplifying changes.
 disable-model-invocation: true
 ---
 

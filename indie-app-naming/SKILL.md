@@ -1,14 +1,13 @@
 ---
 name: indie-app-naming
-description: |
-  Best practices for choosing a strong, memorable, and available name for an indie app or game.
-  Use whenever the user asks for app name ideas, naming advice, branding for solo/small teams, domain checks, or how to evaluate names.
-  Triggers: "name my app", "app name ideas", "best name for", "naming my indie app", "check domain", "name brainstorming".
+description: Name indie apps and games with memorable, available options and domain checks. Use when brainstorming names, evaluating branding, or checking availability.
 ---
 
 # Indie App Naming
 
 **When to use**: naming a new app/game/tool, evaluating a name, domains, store conflicts, or solo/small-team branding.
+
+**Triggers:** name my app, app name ideas, best name for, naming my indie app, check domain, name brainstorming.
 
 ## Principles
 

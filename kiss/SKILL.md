@@ -1,16 +1,9 @@
 ---
 name: kiss
-description: |
-  Ruthlessly simplifies code, plans, and designs while keeping the same (or better) functionality.
-  Use when the user invokes /kiss or KISS, asks to simplify a plan or implementation, strip complexity,
-  remove over-engineering or unnecessary abstractions, apply YAGNI, or wants the smallest correct solution.
+description: Simplify code, plans, and designs to the smallest correct solution. Use when invoking /kiss, stripping complexity, or applying YAGNI.
 ---
 
 # KISS (`/kiss`)
-
-## Description
-
-Ruthlessly simplifies code, plans, and designs while keeping the same (or better) functionality.
 
 ## What it does
 
