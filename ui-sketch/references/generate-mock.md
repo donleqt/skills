@@ -6,7 +6,7 @@ Process:
 
 1. Understand user goals
 2. Infer missing requirements
-3. Reuse project UI patterns from `.ui-skill/` (or `references/default-tokens.json`)
+3. Reuse project UI patterns from the style cache (`references/analyze-style.md`) or `references/default-tokens.json`
 4. Copy `templates/base-shell.html` or the closest matching template
 5. Design mobile-first using spacing tokens only (`page`, `section`, `card`, `stack`)
 6. Generate responsive mockup
@@ -30,7 +30,7 @@ Rules:
 - Tailwind CDN allowed
 - Placeholder data allowed
 - Static interactions allowed
-- Spacing must use tokens from `.ui-skill/tokens.json` or `references/default-tokens.json`
+- Spacing must use tokens from the style cache `tokens.json` or `references/default-tokens.json`
 - `notes` must include `Self-review: passed mobile, tablet, desktop responsive checks` when validation succeeded
 
 Forbidden:

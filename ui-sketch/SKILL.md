@@ -8,7 +8,7 @@ description: Generate responsive HTML UI mockups before implementation. Use when
 When this skill is activated:
 
 1. Read `references/analyze-style.md`
-2. Build or update `.ui-skill/` if needed (use `references/default-tokens.json` when no project tokens exist)
+2. Resolve the style cache per `references/analyze-style.md` (`<git-dir>/ui-skill/` or `.agents/ui-skills/`); build or update if needed (seed from `references/default-tokens.json` when no project tokens exist)
 3. Read `references/generate-mock.md`
 4. Read `references/responsive-rules.md`
 5. Read `references/validate-mock.md`
