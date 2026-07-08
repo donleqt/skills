@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User Journeys</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/@xyflow/react@12/dist/style.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script>
+      // @xyflow/react UMD expects react/jsx-runtime as globalThis.jsxRuntime
+      (function () {
+        const RESERVED_PROPS = {
+          key: true,
+          ref: true,
+          __self: true,
+          __source: true,
+        };
+
+        function jsx(type, config, maybeKey) {
+          let propName;
+          const props = {};
+          let key = null;
+          let ref = null;
+
+          if (maybeKey !== undefined) {
+            key = String(maybeKey);
+          }
+          if (config.key !== undefined) {
+            key = String(config.key);
+          }
+          if (config.ref !== undefined) {
+            ref = config.ref;
+          }
+
+          for (propName in config) {
+            if (
+              Object.prototype.hasOwnProperty.call(config, propName) &&
+              !RESERVED_PROPS.hasOwnProperty(propName)
+            ) {
+              props[propName] = config[propName];
+            }
+          }
+
+          if (type && type.defaultProps) {
+            const defaultProps = type.defaultProps;
+            for (propName in defaultProps) {
+              if (props[propName] === undefined) {
+                props[propName] = defaultProps[propName];
+              }
+            }
+          }
+
+          return React.createElement(type, Object.assign({ key, ref }, props));
+        }
+
+        globalThis.jsxRuntime = { jsx, jsxs: jsx, Fragment: React.Fragment };
+      })();
+    </script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@xyflow/react@12/dist/umd/index.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              canvas: "#f4f6fb",
+              subtle: "#f8fafc",
+              edge: "#e2e8f0",
+              "edge-strong": "#cbd5e1",
+              ink: "#0f172a",
+              muted: "#64748b",
+              brand: "#4f46e5",
+              group: "#8250df",
+              "group-soft": "#f6efff",
+              journey: "#2563eb",
+              "journey-soft": "#eef4ff",
+              step: "#64748b",
+              "step-soft": "#f1f5f9",
+              covered: "#059669",
+              "covered-soft": "#ecfdf5",
+              gap: "#d97706",
+              "gap-soft": "#fffbeb",
+              ineligible: "#64748b",
+              "ineligible-soft": "#f1f5f9",
+            },
+            fontFamily: {
+              sans: [
+                "Inter",
+                "-apple-system",
+                "BlinkMacSystemFont",
+                "Segoe UI",
+                "Roboto",
+                "Helvetica",
+                "Arial",
+                "sans-serif",
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <!-- React Flow internal chrome overrides (library-owned elements) -->
+    <style>
+      .react-flow__node {
+        width: auto;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        color: inherit;
+        font-size: inherit;
+        text-align: left;
+      }
+      .react-flow {
+        background: #f4f6fb;
+      }
+    </style>
+  </head>
+  <body class="h-full overflow-hidden bg-white text-ink antialiased font-sans">
+    <div id="root" class="flex flex-col w-full h-full">
+      <p class="p-6">Loading journeys…</p>
+    </div>
+    <script id="journeys-data" type="application/json">
+{
+  "project_name": "Project Name",
+  "groups": []
+}
+    </script>
+    <script type="text/babel">
+      const {
+        ReactFlow,
+        Background,
+        Controls,
+        MiniMap,
+        ReactFlowProvider,
+        useReactFlow,
+        Handle,
+        Position,
+        MarkerType,
+      } = window.ReactFlow;
+
+      const { useState, useMemo, useCallback, useEffect } = React;
+
+      // Shared Tailwind class strings for flow nodes and the detail panel.
+      const NODE_BASE =
+        "relative pl-[0.95rem] pr-7 py-[0.7rem] rounded-lg border-2 min-w-[170px] max-w-[230px] text-[0.82rem] leading-snug shadow-[0_1px_2px_rgba(15,23,42,0.06)] cursor-pointer transition-[transform,box-shadow] duration-100 hover:-translate-y-px hover:shadow-[0_4px_16px_rgba(15,23,42,0.08)]";
+      const NODE_ID =
+        "block font-bold text-[0.72rem] tracking-wide uppercase text-muted";
+      const NODE_TITLE = "block mt-[0.2rem] font-semibold text-ink";
+      const NODE_META = "block mt-[0.3rem] text-muted text-[0.75rem]";
+      const NODE_SELECTED = "ring-[3px] ring-brand/10";
+
+      function isJourneyEligible(journey) {
+        return journey.e2e_eligible !== false;
+      }
+
+      function isJourneyCovered(journey) {
+        return Array.isArray(journey.e2e) && journey.e2e.length > 0;
+      }
+
+      function getJourneyCoverageStatus(journey) {
+        if (!isJourneyEligible(journey)) return "ineligible";
+        if (isJourneyCovered(journey)) return "covered";
+        return "gap";
+      }
+
+      function getGroupCoverage(group) {
+        const eligible = group.journeys.filter(isJourneyEligible);
+        const covered = eligible.filter(isJourneyCovered);
+        return { covered: covered.length, eligible: eligible.length };
+      }
+
+      function getGlobalCoverage(data) {
+        const journeys = data.groups.flatMap((group) => group.journeys);
+        const eligible = journeys.filter(isJourneyEligible);
+        const covered = eligible.filter(isJourneyCovered);
+        const pct = eligible.length
+          ? Math.round((covered.length / eligible.length) * 100)
+          : 100;
+        return { covered: covered.length, eligible: eligible.length, pct };
+      }
+
+      function journeyBorderClass(status) {
+        if (status === "covered") return "border-covered";
+        if (status === "gap") return "border-gap";
+        return "border-journey";
+      }
+
+      // Color minimap nodes by type + E2E coverage so the overview is legible:
+      // groups purple, steps light gray, journeys tinted by coverage status.
+      function minimapNodeColor(node) {
+        if (node.type === "group") return "#8250df";
+        if (node.type === "step") return "#cbd5e1";
+        const status = node.data?.coverageStatus;
+        if (status === "covered") return "#059669";
+        if (status === "gap") return "#d97706";
+        if (status === "ineligible") return "#94a3b8";
+        return "#2563eb";
+      }
+
+      function CoverageBadge({ status }) {
+        if (status === "covered") {
+          return (
+            <span className="absolute bottom-1 right-7 z-10 px-1 py-px text-[0.58rem] font-bold tracking-wide uppercase rounded border border-covered bg-covered-soft text-covered leading-none">
+              E2E
+            </span>
+          );
+        }
+        if (status === "gap") {
+          return (
+            <span className="absolute bottom-1 right-7 z-10 px-1 py-px text-[0.58rem] font-bold tracking-wide uppercase rounded border border-gap bg-gap-soft text-gap leading-none">
+              GAP
+            </span>
+          );
+        }
+        if (status === "ineligible") {
+          return (
+            <span className="absolute bottom-1 right-7 z-10 px-1 py-px text-[0.58rem] font-bold tracking-wide uppercase rounded border border-ineligible bg-ineligible-soft text-ineligible leading-none">
+              N/A
+            </span>
+          );
+        }
+        return null;
+      }
+
+      function E2eCoveragePanel({ journey }) {
+        const status = getJourneyCoverageStatus(journey);
+        if (status === "covered") {
+          return (
+            <>
+              <h3 className={PANEL_H3}>E2E coverage</h3>
+              <ul className="list-none pl-0 my-1 space-y-1">
+                {journey.e2e.map((spec) => (
+                  <li
+                    key={spec}
+                    className="py-1 px-2 bg-covered-soft border border-covered/30 rounded text-[0.7rem] font-mono break-all"
+                  >
+                    {spec}
+                  </li>
+                ))}
+              </ul>
+            </>
+          );
+        }
+        if (status === "gap") {
+          return (
+            <>
+              <h3 className={PANEL_H3}>E2E coverage</h3>
+              <p className="text-gap font-medium my-1">No E2E linked</p>
+            </>
+          );
+        }
+        if (status === "ineligible") {
+          return (
+            <>
+              <h3 className={PANEL_H3}>E2E coverage</h3>
+              <p className={PANEL_META}>
+                {journey.e2e_note ?? "Excluded from E2E coverage."}
+              </p>
+            </>
+          );
+        }
+        return null;
+      }
+
+      function ToggleButton({ expanded, onToggle }) {
+        return (
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              onToggle();
+            }}
+            className="nodrag absolute top-1 right-1 z-10 w-5 h-5 flex items-center justify-center rounded-md border border-edge bg-white/80 text-[0.8rem] font-bold leading-none text-muted hover:bg-brand hover:text-white hover:border-brand transition-colors"
+            aria-label={expanded ? "Collapse subtree" : "Expand subtree"}
+            aria-expanded={expanded}
+            title={expanded ? "Collapse (recursive)" : "Expand (recursive)"}
+          >
+            {expanded ? "−" : "+"}
+          </button>
+        );
+      }
+
+      const PANEL_H2 = "mr-6 mb-2 text-[0.9rem] font-bold tracking-tight";
+      const PANEL_H3 =
+        "text-[0.72rem] uppercase tracking-wider text-muted mt-3 mb-[0.35rem]";
+      const PANEL_P = "my-[0.3rem] leading-snug";
+      const PANEL_META = "my-[0.3rem] leading-snug text-muted";
+      const STEP_H3 =
+        "text-step text-[0.68rem] uppercase tracking-wider font-bold mb-1";
+      const STEP_P = "mt-1 mb-0 leading-snug";
+      const STEP_META = "mt-1 mb-0 leading-snug text-muted";
+
+      function GroupNode({ data, selected }) {
+        const { group, coverage, expanded, hasChildren, onToggle } = data;
+        return (
+          <div
+            className={`${NODE_BASE} border-group bg-group-soft${selected ? ` ${NODE_SELECTED}` : ""}`}
+          >
+            {hasChildren ? (
+              <ToggleButton expanded={expanded} onToggle={onToggle} />
+            ) : null}
+            <span className={NODE_ID}>{group.group_id}</span>
+            <span className={NODE_TITLE}>{group.group_name}</span>
+            <span className={NODE_META}>
+              {coverage.eligible > 0
+                ? `${coverage.covered}/${coverage.eligible} E2E covered`
+                : `${group.journeys.length} ${group.journeys.length === 1 ? "journey" : "journeys"}`}
+            </span>
+            <Handle type="source" position={Position.Right} />
+          </div>
+        );
+      }
+
+      function JourneyNode({ data, selected }) {
+        const { journey, coverageStatus, expanded, hasChildren, onToggle } =
+          data;
+        return (
+          <div
+            className={`${NODE_BASE} ${journeyBorderClass(coverageStatus)} bg-journey-soft${selected ? ` ${NODE_SELECTED}` : ""}`}
+          >
+            <Handle type="target" position={Position.Left} />
+            {hasChildren ? (
+              <ToggleButton expanded={expanded} onToggle={onToggle} />
+            ) : null}
+            <CoverageBadge status={coverageStatus} />
+            <span className={NODE_ID}>{journey.journey_id}</span>
+            <span className={NODE_TITLE}>{journey.journey_name}</span>
+            <span className={NODE_META}>{journey.actor}</span>
+            <Handle type="source" position={Position.Right} />
+          </div>
+        );
+      }
+
+      function StepNode({ data, selected }) {
+        const { step } = data;
+        const preview =
+          step.user_action.length > 60
+            ? `${step.user_action.slice(0, 57)}…`
+            : step.user_action;
+
+        return (
+          <div
+            className={`${NODE_BASE} border-step bg-step-soft min-w-[150px] max-w-[190px]${selected ? ` ${NODE_SELECTED}` : ""}`}
+          >
+            <Handle type="target" position={Position.Left} />
+            <span className={NODE_ID}>Step {step.step_number}</span>
+            <span className={NODE_TITLE}>{preview}</span>
+            <Handle type="source" position={Position.Right} />
+          </div>
+        );
+      }
+
+      const nodeTypes = {
+        group: GroupNode,
+        journey: JourneyNode,
+        step: StepNode,
+      };
+
+      // Column-based tree layout: groups | journeys | steps.
+      // Every expanded branch is laid out simultaneously; each leaf occupies a
+      // row and each parent is vertically centered on its visible children so
+      // sibling branches never overlap.
+      const COL_X = { group: 40, journey: 380, step: 760 };
+      const COL_TOP = 12;
+      const ROW_GAP = 116;
+      const GROUP_GAP = 28;
+
+      function flowEdge(source, target) {
+        return {
+          id: `${source}->${target}`,
+          source,
+          target,
+          type: "smoothstep",
+          animated: true,
+          markerEnd: { type: MarkerType.ArrowClosed },
+        };
+      }
+
+      function centerOf(positions) {
+        return (positions[0] + positions[positions.length - 1]) / 2;
+      }
+
+      function buildGraph(
+        data,
+        expandedGroups,
+        expandedJourneys,
+        handlers,
+        uncoveredOnly,
+      ) {
+        const nodes = [];
+        const edges = [];
+        let yCursor = COL_TOP;
+
+        data.groups.forEach((group) => {
+          const visibleJourneys = uncoveredOnly
+            ? group.journeys.filter(
+                (journey) => getJourneyCoverageStatus(journey) === "gap",
+              )
+            : group.journeys;
+
+          if (uncoveredOnly && visibleJourneys.length === 0) {
+            return;
+          }
+
+          const groupExpanded = expandedGroups.has(group.group_id);
+          const journeyYs = [];
+
+          if (groupExpanded) {
+            visibleJourneys.forEach((journey) => {
+              const journeyExpanded = expandedJourneys.has(journey.journey_id);
+              const stepYs = [];
+
+              if (journeyExpanded) {
+                journey.steps.forEach((step) => {
+                  const stepId = `${journey.journey_id}-step-${step.step_number}`;
+                  const y = yCursor;
+                  yCursor += ROW_GAP;
+                  stepYs.push(y);
+                  nodes.push({
+                    id: stepId,
+                    type: "step",
+                    position: { x: COL_X.step, y },
+                    data: { step, journey, group, level: "step" },
+                  });
+                  edges.push(flowEdge(journey.journey_id, stepId));
+                });
+              }
+
+              let journeyY;
+              if (stepYs.length) {
+                journeyY = centerOf(stepYs);
+              } else {
+                journeyY = yCursor;
+                yCursor += ROW_GAP;
+              }
+              journeyYs.push(journeyY);
+
+              nodes.push({
+                id: journey.journey_id,
+                type: "journey",
+                position: { x: COL_X.journey, y: journeyY },
+                data: {
+                  journey,
+                  group,
+                  level: "journey",
+                  coverageStatus: getJourneyCoverageStatus(journey),
+                  expanded: journeyExpanded,
+                  hasChildren: journey.steps.length > 0,
+                  onToggle: () => handlers.onToggleJourney(journey),
+                },
+              });
+              edges.push(flowEdge(group.group_id, journey.journey_id));
+            });
+          }
+
+          let groupY;
+          if (journeyYs.length) {
+            groupY = centerOf(journeyYs);
+          } else {
+            groupY = yCursor;
+            yCursor += ROW_GAP;
+          }
+
+          nodes.push({
+            id: group.group_id,
+            type: "group",
+            position: { x: COL_X.group, y: groupY },
+            data: {
+              group,
+              coverage: getGroupCoverage(group),
+              level: "group",
+              expanded: groupExpanded,
+              hasChildren: visibleJourneys.length > 0,
+              onToggle: () => handlers.onToggleGroup(group),
+            },
+          });
+
+          yCursor += GROUP_GAP;
+        });
+
+        return { nodes, edges };
+      }
+
+      function DetailPanelContent({ selection }) {
+        if (!selection) {
+          return (
+            <>
+              <h2 className={PANEL_H2}>Details</h2>
+              <p className={PANEL_META}>
+                Select a group, journey, or step to see its details here. Parent
+                columns stay visible as you expand to the right.
+              </p>
+            </>
+          );
+        }
+
+        if (selection.level === "group") {
+          const { group } = selection;
+          return (
+            <>
+              <h2 className={PANEL_H2}>{group.group_name}</h2>
+              <p className={PANEL_P}>{group.description}</p>
+            </>
+          );
+        }
+
+        if (selection.level === "journey") {
+          const { journey } = selection;
+          return (
+            <>
+              <h2 className={PANEL_H2}>{journey.journey_name}</h2>
+              <p className={PANEL_P}>
+                <strong>Trigger:</strong> {journey.trigger}
+              </p>
+              <E2eCoveragePanel journey={journey} />
+              <h3 className={PANEL_H3}>Steps ({journey.steps.length})</h3>
+              <ol className="list-none pl-0 mt-[0.35rem] space-y-2">
+                {journey.steps.map((step) => (
+                  <li
+                    key={step.step_number}
+                    className="py-[0.55rem] px-[0.65rem] bg-subtle border border-edge border-l-[3px] border-l-step rounded-lg"
+                  >
+                    <h3 className={STEP_H3}>Step {step.step_number}</h3>
+                    <p className={STEP_P}>{step.user_action}</p>
+                    <p className={STEP_META}>{step.system_response}</p>
+                    <p className={STEP_META}>{step.ux_state}</p>
+                  </li>
+                ))}
+              </ol>
+            </>
+          );
+        }
+
+        const { step, journey } = selection;
+        return (
+          <>
+            <h2 className={PANEL_H2}>
+              {journey.journey_id} · Step {step.step_number}
+            </h2>
+            <p className={PANEL_P}>{step.user_action}</p>
+            <h3 className={PANEL_H3}>System response</h3>
+            <p className={PANEL_META}>{step.system_response}</p>
+            <h3 className={PANEL_H3}>UX state</h3>
+            <p className={PANEL_META}>{step.ux_state}</p>
+          </>
+        );
+      }
+
+      // Fits the viewport on the initial mount and whenever `fitSignal`
+      // changes (i.e. only on Expand all / Collapse all). Selecting or toggling
+      // an individual node never triggers a refit, so the user's zoom/pan is
+      // preserved on click.
+      function AutoFitView({ fitSignal }) {
+        const { fitView } = useReactFlow();
+
+        useEffect(() => {
+          const frame = requestAnimationFrame(() => {
+            fitView({
+              padding: { top: 8, right: 40, bottom: 32, left: 24 },
+              duration: 150,
+              maxZoom: 0.95,
+            });
+          });
+          return () => cancelAnimationFrame(frame);
+        }, [fitSignal, fitView]);
+
+        return null;
+      }
+
+      function FlowCanvas({
+        nodes,
+        edges,
+        onNodeClick,
+        onPaneClick,
+        selectedId,
+        fitSignal,
+      }) {
+        const styledNodes = useMemo(
+          () =>
+            nodes.map((node) => ({
+              ...node,
+              selected: node.id === selectedId,
+            })),
+          [nodes, selectedId],
+        );
+
+        return (
+          <div className="flex-1 min-h-0 w-full">
+            <ReactFlow
+              nodes={styledNodes}
+              edges={edges}
+              nodeTypes={nodeTypes}
+              onNodeClick={onNodeClick}
+              onPaneClick={onPaneClick}
+              nodesConnectable={false}
+              nodesDraggable={false}
+              elementsSelectable
+              minZoom={0.3}
+              maxZoom={1.5}
+            >
+              <AutoFitView fitSignal={fitSignal} />
+              <Background gap={16} size={1} />
+              <Controls showInteractive={false} />
+              <MiniMap
+                pannable
+                zoomable
+                ariaLabel="Journey map overview"
+                nodeColor={minimapNodeColor}
+                nodeStrokeColor={minimapNodeColor}
+                nodeStrokeWidth={3}
+                nodeBorderRadius={2}
+                maskColor="rgba(15, 23, 42, 0.16)"
+                maskStrokeColor="#94a3b8"
+                maskStrokeWidth={1}
+                style={{
+                  width: 156,
+                  height: 108,
+                  backgroundColor: "#ffffff",
+                  border: "1px solid #e2e8f0",
+                  borderRadius: 8,
+                }}
+              />
+            </ReactFlow>
+          </div>
+        );
+      }
+
+      function Breadcrumbs({ view, data, onNavigate }) {
+        const crumbs = [{ label: "All groups", level: "overview" }];
+
+        if (view.level === "group" || view.level === "journey") {
+          const group = data.groups.find((g) => g.group_id === view.groupId);
+          if (group) {
+            crumbs.push({
+              label: `${group.group_id} — ${group.group_name}`,
+              level: "group",
+              groupId: group.group_id,
+            });
+          }
+        }
+
+        if (view.level === "journey") {
+          const group = data.groups.find((g) => g.group_id === view.groupId);
+          const journey = group?.journeys.find(
+            (j) => j.journey_id === view.journeyId,
+          );
+          if (journey) {
+            crumbs.push({
+              label: `${journey.journey_id} — ${journey.journey_name}`,
+              level: "journey",
+              groupId: view.groupId,
+              journeyId: journey.journey_id,
+            });
+          }
+        }
+
+        return (
+          <nav
+            className="flex flex-wrap items-center gap-1 text-[0.75rem]"
+            aria-label="Journey map navigation"
+          >
+            {crumbs.map((crumb, index) => (
+              <React.Fragment key={`${crumb.level}-${crumb.groupId ?? ""}-${crumb.journeyId ?? ""}`}>
+                {index > 0 ? (
+                  <span className="text-edge-strong">›</span>
+                ) : null}
+                {index === crumbs.length - 1 ? (
+                  <span className="font-semibold text-ink" aria-current="page">
+                    {crumb.label}
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    className="px-2 py-[0.1rem] text-brand bg-brand/10 border-0 rounded-full cursor-pointer transition-colors hover:bg-brand hover:text-white"
+                    onClick={() =>
+                      onNavigate({
+                        level: crumb.level,
+                        groupId: crumb.groupId,
+                        journeyId: crumb.journeyId,
+                      })
+                    }
+                  >
+                    {crumb.label}
+                  </button>
+                )}
+              </React.Fragment>
+            ))}
+          </nav>
+        );
+      }
+
+      const allGroupIds = (data) => data.groups.map((g) => g.group_id);
+      const allJourneyIds = (data) =>
+        data.groups.flatMap((g) => g.journeys.map((j) => j.journey_id));
+
+      function App({ data }) {
+        const [expandedGroups, setExpandedGroups] = useState(
+          () => new Set(allGroupIds(data)),
+        );
+        const [expandedJourneys, setExpandedJourneys] = useState(
+          () => new Set(allJourneyIds(data)),
+        );
+        const [selection, setSelection] = useState(null);
+        const [selectedId, setSelectedId] = useState(null);
+        // Bumped only when we want the viewport to refit (initial load and the
+        // Expand all / Collapse all actions). Not touched on node clicks.
+        const [fitSignal, setFitSignal] = useState(0);
+        const requestFit = useCallback(() => setFitSignal((n) => n + 1), []);
+
+        const [uncoveredOnly, setUncoveredOnly] = useState(false);
+
+        const totalJourneys = data.groups.reduce(
+          (sum, group) => sum + group.journeys.length,
+          0,
+        );
+        const globalCoverage = useMemo(() => getGlobalCoverage(data), [data]);
+
+        // Recursive toggles: collapsing/expanding a group also
+        // collapses/expands every journey it contains.
+        const handlers = useMemo(
+          () => ({
+            onToggleGroup: (group) => {
+              const isOpen = expandedGroups.has(group.group_id);
+              const nextGroups = new Set(expandedGroups);
+              const nextJourneys = new Set(expandedJourneys);
+              const journeyIds = group.journeys.map((j) => j.journey_id);
+              if (isOpen) {
+                nextGroups.delete(group.group_id);
+                journeyIds.forEach((id) => nextJourneys.delete(id));
+              } else {
+                nextGroups.add(group.group_id);
+                journeyIds.forEach((id) => nextJourneys.add(id));
+              }
+              setExpandedGroups(nextGroups);
+              setExpandedJourneys(nextJourneys);
+            },
+            onToggleJourney: (journey) => {
+              const next = new Set(expandedJourneys);
+              if (next.has(journey.journey_id)) {
+                next.delete(journey.journey_id);
+              } else {
+                next.add(journey.journey_id);
+              }
+              setExpandedJourneys(next);
+            },
+          }),
+          [expandedGroups, expandedJourneys],
+        );
+
+        const { nodes, edges } = useMemo(
+          () =>
+            buildGraph(
+              data,
+              expandedGroups,
+              expandedJourneys,
+              handlers,
+              uncoveredOnly,
+            ),
+          [data, expandedGroups, expandedJourneys, handlers, uncoveredOnly],
+        );
+
+        const view = selection
+          ? selection.level === "group"
+            ? { level: "group", groupId: selection.group.group_id }
+            : {
+                level: "journey",
+                groupId: selection.group.group_id,
+                journeyId: selection.journey.journey_id,
+              }
+          : { level: "overview" };
+
+        const expandAll = useCallback(() => {
+          setExpandedGroups(new Set(allGroupIds(data)));
+          setExpandedJourneys(new Set(allJourneyIds(data)));
+          requestFit();
+        }, [data, requestFit]);
+
+        const collapseAll = useCallback(() => {
+          setExpandedGroups(new Set());
+          setExpandedJourneys(new Set());
+          requestFit();
+        }, [requestFit]);
+
+        const onNavigate = useCallback(
+          (nextView) => {
+            if (nextView.level === "overview") {
+              setSelection(null);
+              setSelectedId(null);
+              return;
+            }
+
+            const group = data.groups.find(
+              (g) => g.group_id === nextView.groupId,
+            );
+            if (!group) return;
+
+            if (nextView.level === "group") {
+              setExpandedGroups((prev) => new Set(prev).add(group.group_id));
+              setSelection({ level: "group", group });
+              setSelectedId(group.group_id);
+              return;
+            }
+
+            const journey = group.journeys.find(
+              (j) => j.journey_id === nextView.journeyId,
+            );
+            if (journey) {
+              setExpandedGroups((prev) => new Set(prev).add(group.group_id));
+              setExpandedJourneys((prev) =>
+                new Set(prev).add(journey.journey_id),
+              );
+              setSelection({ level: "journey", journey, group });
+              setSelectedId(journey.journey_id);
+            }
+          },
+          [data],
+        );
+
+        const onNodeClick = useCallback((_event, node) => {
+          const { level } = node.data;
+          setSelectedId(node.id);
+
+          if (level === "group") {
+            setSelection({ level: "group", group: node.data.group });
+            return;
+          }
+
+          if (level === "journey") {
+            const { journey, group } = node.data;
+            setSelection({ level: "journey", journey, group });
+            return;
+          }
+
+          const { step, journey, group } = node.data;
+          setSelection({ level: "step", step, journey, group });
+        }, []);
+
+        const onCloseDrawer = useCallback(() => {
+          setSelection(null);
+          setSelectedId(null);
+        }, []);
+
+        const toggleUncoveredOnly = useCallback(() => {
+          setUncoveredOnly((prev) => !prev);
+          requestFit();
+        }, [requestFit]);
+
+        return (
+          <>
+            <header className="shrink-0 flex items-center flex-wrap gap-x-3 gap-y-1 px-4 py-1 border-b border-edge bg-white">
+              <h1 className="text-[0.9rem] font-bold tracking-tight whitespace-nowrap">
+                {data.project_name} — User Journeys
+              </h1>
+              <span className="text-muted text-[0.72rem] whitespace-nowrap">
+                {data.groups.length} groups · {totalJourneys} journeys
+              </span>
+              <span className="text-[0.72rem] whitespace-nowrap font-medium text-covered">
+                E2E {globalCoverage.covered}/{globalCoverage.eligible} ·{" "}
+                {globalCoverage.pct}%
+              </span>
+              <Breadcrumbs view={view} data={data} onNavigate={onNavigate} />
+              <div className="flex items-center gap-1 ml-auto">
+                <button
+                  type="button"
+                  onClick={toggleUncoveredOnly}
+                  aria-pressed={uncoveredOnly}
+                  className={`px-2 py-[0.15rem] text-[0.72rem] border rounded-full cursor-pointer transition-colors ${
+                    uncoveredOnly
+                      ? "text-white bg-gap border-gap"
+                      : "text-muted bg-subtle border-edge hover:bg-gap hover:text-white hover:border-gap"
+                  }`}
+                >
+                  {uncoveredOnly ? "Show all" : "Show gaps only"}
+                </button>
+                <button
+                  type="button"
+                  onClick={expandAll}
+                  className="px-2 py-[0.15rem] text-[0.72rem] text-muted bg-subtle border border-edge rounded-full cursor-pointer transition-colors hover:bg-brand hover:text-white hover:border-brand"
+                >
+                  Expand all
+                </button>
+                <button
+                  type="button"
+                  onClick={collapseAll}
+                  className="px-2 py-[0.15rem] text-[0.72rem] text-muted bg-subtle border border-edge rounded-full cursor-pointer transition-colors hover:bg-brand hover:text-white hover:border-brand"
+                >
+                  Collapse all
+                </button>
+              </div>
+            </header>
+            <div className="flex flex-1 min-h-0 w-full relative overflow-hidden">
+              <section
+                className="flex-1 min-w-0 min-h-0 w-full flex flex-col bg-canvas"
+                aria-label="Journey flow map"
+              >
+                <ReactFlowProvider>
+                  <FlowCanvas
+                    nodes={nodes}
+                    edges={edges}
+                    onNodeClick={onNodeClick}
+                    onPaneClick={onCloseDrawer}
+                    selectedId={selectedId}
+                    fitSignal={fitSignal}
+                  />
+                </ReactFlowProvider>
+              </section>
+              <aside
+                className={`absolute top-3 right-3 w-[calc(100%-1.5rem)] max-w-[320px] sm:w-[clamp(240px,22vw,300px)] sm:max-w-none max-h-[calc(100%-1.5rem)] overflow-y-auto pt-[1.6rem] px-[0.9rem] pb-[0.9rem] border border-edge rounded-xl bg-white shadow-[0_4px_16px_rgba(15,23,42,0.08)] text-[0.75rem] transition-all duration-[240ms] ease-[cubic-bezier(0.4,0,0.2,1)] z-[6] ${selection ? "translate-x-0 opacity-100" : "translate-x-[calc(100%+1.5rem)] opacity-0 pointer-events-none"}`}
+                aria-hidden={!selection}
+                aria-label="Details"
+              >
+                <button
+                  type="button"
+                  className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center p-0 text-[1.1rem] leading-none text-muted bg-subtle border border-edge rounded-full cursor-pointer transition-colors hover:bg-brand hover:text-white hover:border-brand"
+                  onClick={onCloseDrawer}
+                  aria-label="Close details"
+                >
+                  ×
+                </button>
+                <DetailPanelContent selection={selection} />
+              </aside>
+            </div>
+          </>
+        );
+      }
+
+      function ErrorView({ message }) {
+        return (
+          <main className="p-6">
+            <h1 className="text-lg font-bold mb-2">Could not load journeys</h1>
+            <p className="text-muted">{message}</p>
+          </main>
+        );
+      }
+
+      try {
+        const raw = document.getElementById("journeys-data").textContent;
+        const data = JSON.parse(raw);
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<App data={data} />);
+      } catch (error) {
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<ErrorView message={error.message} />);
+      }
+    </script>
+  </body>
+</html>
