@@ -43,6 +43,11 @@ A collection of agent skills for indie builders.
   npx skills@latest add donleqt/skills/minimal-effective-implementation
   ```
 
+- **agent-browser** - Drives a real browser via the `agent-browser` CLI to test, screenshot, and verify UI changes and user flows instead of manual click-throughs.
+  ```bash
+  npx skills@latest add donleqt/skills/agent-browser
+  ```
+
 ## UI & Design
 
 - **ui-wireframe** (`/ui-wireframe`) - Create low-fidelity ASCII wireframes to validate information architecture, layout, navigation, workflows, and responsive behavior before visual design or implementation.
