@@ -16,7 +16,8 @@ When this skill is activated:
 7. Generate a responsive HTML mockup using project or default spacing tokens only
 8. Run the visual QA checklist and responsive self-review in `references/validate-mock.md`
 9. Do NOT implement production code
-10. Return only the requested mock output format
+10. Save the mockup HTML file to `ui-skills/mockups/` (create the directory if it doesn't exist), using a descriptive kebab-case filename (e.g. `ui-skills/mockups/login-form.html`)
+11. Return only the requested mock output format, including the saved file path
 
 ## Resources
 
