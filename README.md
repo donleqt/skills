@@ -65,6 +65,13 @@ A collection of agent skills for indie builders.
   npx skills@latest add donleqt/skills/ui-sketch
   ```
 
+## QA & Documentation
+
+- **e2e-user-journeys** — Maps every user journey for a product or feature into an interactive `journeys.html` file with granular UX steps, E2E test spec linking, and coverage visualization.
+  ```bash
+  npx skills@latest add donleqt/skills/e2e-user-journeys
+  ```
+
 ## About
 
 Personal skill directory by `donleqt`.

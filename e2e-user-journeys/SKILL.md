@@ -1,11 +1,6 @@
 ---
 name: e2e-user-journeys
-description: >-
-  Map every possible user journey for a product, feature, or platform into
-  journeys.html with granular UX steps. Auto-discovers E2E test setup (Playwright,
-  Cypress, etc.) to link journeys to specs. Use when the user asks for user journey
-  mapping, UX flows, journey documentation, exhaustive flow analysis, e2e coverage
-  mapping, or journeys.html.
+description: Map every product journey into an interactive journeys.html with UX steps and E2E spec links. Use for user journey mapping, UX flows, exhaustive flow analysis, or e2e coverage mapping.
 ---
 
 # E2E User Journeys
