@@ -28,6 +28,11 @@ A collection of agent skills for indie builders.
 
 ## Code & Planning
 
+- **grill-fast** (`/grill-fast`) - Relentlessly stress-tests a plan, decision, or design by asking one probing question at a time until the decision tree is fully resolved.
+  ```bash
+  npx skills@latest add donleqt/skills/grill-fast
+  ```
+
 - **kiss** (`/kiss`) - Ruthlessly simplifies code, plans, and designs while keeping the same (or better) functionality; least code and moving parts without sacrificing correctness or maintainability.
   ```bash
   npx skills@latest add donleqt/skills/kiss
