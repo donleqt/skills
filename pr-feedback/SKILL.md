@@ -17,7 +17,9 @@ For **human teammate** review, never silently skip. Report to the user instead �
 4. **Vet each comment** — verdict + one-line reason, with rules that differ by source.
 5. **Apply accepted fixes** with the smallest change that resolves the concern.
 6. **Reply to skipped AI items** in-thread, short and clear.
-7. **Post a top-level summary** with the buckets.
+7. **Push the fix commits** successfully.
+8. **Reply on fixed threads** with `Fixed in <sha>`.
+9. **Post a top-level summary** with the buckets.
 
 ## 1. Find the PR
 
@@ -92,7 +94,7 @@ A fix is **done** when the change is in a commit, the touched files pass typeche
 
 For each AI `skip`, post a comment on the same review thread (`gh api .../comments/<id>/replies`) or, if there is no thread, a new PR comment that quotes the original.
 
-**Tag the AI reviewer** in your reply so they don't re-flag the same item on a re-review. Use the exact handle — these are case- and punctuation-sensitive:
+**Tag the AI reviewer** so they don't re-flag. Handles are case- and punctuation-sensitive:
 
 - Greptile → `@greptile-apps`
 - Kilo Code → `@kilocode-bot` (not `@kilo-code-bot`)
@@ -100,7 +102,7 @@ For each AI `skip`, post a comment on the same review thread (`gh api .../commen
 - CodeRabbit → `@coderabbitai`
 - Sourcery → `@sourcery-ai`
 
-When in doubt, copy the handle from the original review comment's author mention.
+When in doubt, copy the handle from the original comment's author mention.
 
 Reply style — short, factual, friendly, like a normal PR conversation. No walls of text.
 
@@ -113,7 +115,30 @@ Bad shapes: a bare "disagree", a 10-line essay on why the reviewer is wrong, or 
 
 **Do not reply on behalf of a teammate's comment** — let the user respond.
 
-## 7. Post a top-level summary
+## 7. Push the fix commits
+
+Run `git push` and verify success — exit code 0 and no rejected refs. Then confirm the commits are actually on the remote:
+
+```bash
+git push
+git fetch origin
+git log origin/<branch>..HEAD --oneline   # must be empty
+```
+
+If `git log origin/<branch>..HEAD` lists any commits, the push didn't take — don't post the summary; resolve and re-push first.
+
+Common blockers: branch protection, CI required checks, force-push-only branches. Surface the error to the user; don't `git push --force` without asking.
+
+## 8. Reply on fixed threads
+
+For each `fix`, post a short reply on the thread:
+
+- `Fixed in <sha> — <one-line summary of the change>.`
+- `Fixed in <sha>.` (when the fix is small enough that the SHA + the cited lines speak for themselves)
+
+Never tag the AI on these replies. The diff + the summary's `Fixed` row is the context the re-reviewer needs; tagging would only spend tokens re-prompting the bot.
+
+## 9. Post a top-level summary
 
 When every comment has a verdict, post one PR comment:
 
