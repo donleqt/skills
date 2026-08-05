@@ -92,6 +92,16 @@ A fix is **done** when the change is in a commit, the touched files pass typeche
 
 For each AI `skip`, post a comment on the same review thread (`gh api .../comments/<id>/replies`) or, if there is no thread, a new PR comment that quotes the original.
 
+**Tag the AI reviewer** in your reply so they don't re-flag the same item on a re-review. Use the exact handle — these are case- and punctuation-sensitive:
+
+- Greptile → `@greptile-apps`
+- Kilo Code → `@kilocode-bot` (not `@kilo-code-bot`)
+- Copilot → `@copilot`
+- CodeRabbit → `@coderabbitai`
+- Sourcery → `@sourcery-ai`
+
+When in doubt, copy the handle from the original review comment's author mention.
+
 Reply style — short, factual, friendly, like a normal PR conversation. No walls of text.
 
 Good reply shapes:
