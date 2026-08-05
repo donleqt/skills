@@ -48,6 +48,11 @@ A collection of agent skills for indie builders.
   npx skills@latest add donleqt/skills/agent-browser
   ```
 
+- **pr-feedback** - Vets AI review-agent PR comments conservatively (fix, skip with reasoning, or ask) and reports human teammate feedback to the user instead of silently acting.
+  ```bash
+  npx skills@latest add donleqt/skills/pr-feedback
+  ```
+
 ## UI & Design
 
 - **ui-wireframe** (`/ui-wireframe`) - Create low-fidelity ASCII wireframes to validate information architecture, layout, navigation, workflows, and responsive behavior before visual design or implementation.
