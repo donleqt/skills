@@ -109,11 +109,33 @@ When every comment has a verdict, post one PR comment:
 
 > **PR feedback wrap-up**
 >
-> **Fixed** (N): <one line each, with commit SHA>
-> **Skipped (AI)** (M): <one line each, with link to the per-thread reply>
-> **Asked you** (K): <one line each — covers all human teammate comments plus uncertain AI ones>
+> | Bucket | Count | Items |
+> | --- | ---: | --- |
+> | **Fixed** | N | <one line each, with commit SHA> |
+> | **Skipped (AI)** | M | <one line each, with link to the per-thread reply> |
+> | **Awaiting your decision** | K | <one line each — covers all human teammate comments plus uncertain AI ones> |
 
-Scannable bullets are the work. No preamble like "I reviewed the feedback and...".
+Scannable rows are the work. No preamble like "I reviewed the feedback and...".
+
+### Formatting the Items cell
+
+Native Markdown bullets (`*`, `-`, `1.`) don't render inside table cells on GitHub. Use `<br>` line breaks — one item per line, with a leading `•` for visual grouping.
+
+### Example
+
+> **PR feedback wrap-up**
+>
+> | Bucket | Count | Items |
+> | --- | ---: | --- |
+> | **Fixed** | 4 | • Null-handling in `parseConfig` — `a1b2c3d`<br>• Extract `slugify` helper — `e4f5g6h`<br>• Cache `lookupTable` to avoid re-alloc — `i7j8k9l`<br>• Wrap `fetch` with `AbortSignal.timeout` — `m0n1o2p` |
+> | **Skipped (AI)** | 5 | • Replace `Map` with plain object — [#comment-r1]<br>• Add JSDoc to every export — [#comment-r2]<br>• Split `utils.ts` into 3 files — [#comment-r3]<br>• Switch to `zod` for runtime validation — [#comment-r4]<br>• Rename `id` → `identifier` everywhere — [#comment-r5] |
+> | **Awaiting your decision** | 2 | • Rename `getCwd` → `getCurrentWorkingDirectory` (Copilot, low confidence)<br>• Pin `typescript` to a 5.x version (you flagged in chat) |
+>
+> [#comment-r1]: https://github.com/org/repo/pull/42#discussion_r1
+> [#comment-r2]: https://github.com/org/repo/pull/42#discussion_r2
+> [#comment-r3]: https://github.com/org/repo/pull/42#discussion_r3
+> [#comment-r4]: https://github.com/org/repo/pull/42#discussion_r4
+> [#comment-r5]: https://github.com/org/repo/pull/42#discussion_r5
 
 ## Done when
 
