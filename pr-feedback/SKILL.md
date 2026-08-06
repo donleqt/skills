@@ -65,6 +65,7 @@ The bar for `fix`:
 - **Net win** for the codebase — simpler, safer, or more correct, not just consistent with a generic ideal.
 - **Cost is small** relative to the win. A 200-line refactor to remove 5 lines of duplication is a loss; **complexity is a trade-off, not a target**.
 - **Within scope** of the PR. Drive-by cleanups belong in another PR.
+- **Pre-existing** — not this PR's bug. `Skip`; address in a separate PR.
 
 If any of these fail, default `skip`. If uncertain, `ask`.
 
@@ -149,6 +150,8 @@ When every comment has a verdict, post one PR comment:
 > | **Fixed** | N | <one line each, with commit SHA> |
 > | **Skipped (AI)** | M | <one line each, with link to the per-thread reply> |
 > | **Awaiting your decision** | K | <one line each — covers all human teammate comments plus uncertain AI ones> |
+
+Drop the `Awaiting your decision` row when K = 0.
 
 Scannable rows are the work. No preamble like "I reviewed the feedback and...".
 
